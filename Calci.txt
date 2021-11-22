@@ -1,0 +1,177 @@
+import java.applet.Applet;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Calci extends Applet {
+
+    TextField t1;
+    String num1 = "", num2 = "", op = "";
+
+    public void init() {
+
+        setBackground(Color.black);
+        setLayout(null);
+
+        ActionHandler h = new ActionHandler();
+        K
+
+        t1 = new TextField(10);
+        t1.setBounds(150, 110, 250, 30);
+        t1.setText("0");
+        add(t1);
+        t1.setEditable(false);
+        t1.addActionListener(h);
+
+
+        Button button[] = new Button[9];
+        for (int i = 0; i < 9; i++) {
+            button[i] = new Button(String.valueOf(9 - i));
+            button[i].setBounds(150 + ((i % 3) * 50), 150 + ((i / 3) * 50), 50, 50);
+            add(button[i]);
+            button[i].addActionListener(h);
+         
+        }
+
+        Button clr = new Button("C");
+        clr.setBounds(150, 300, 50, 50);
+        add(clr);
+        clr.addActionListener(h);
+       
+
+        Button zero = new Button("0");
+        zero.setBounds(200, 300, 50, 50);
+        add(zero);
+        zero.addActionListener(h);
+       
+
+        Button dot = new Button(".");
+        dot.setBounds(250, 300, 50, 50);
+        add(dot);
+        dot.addActionListener(h);
+       
+
+        Button plus = new Button("+");
+        plus.setBounds(300, 150, 50, 50);
+        add(plus);
+        plus.addActionListener(h);
+
+        Button sub = new Button("-");
+        sub.setBounds(300, 200, 50, 50);
+        add(sub);
+        
+        sub.addActionListener(h);
+
+        Button multi = new Button("*");
+        multi.setBounds(300, 250, 50, 50);
+        add(multi);
+      
+        multi.addActionListener(h);
+
+        Button div = new Button("/");
+        div.setBounds(300, 300, 50, 50);
+        add(div);
+        
+        div.addActionListener(h);
+
+        Button equal = new Button("=");
+        equal.setBounds(150, 350, 250, 50);
+        add(equal);
+        equal.addActionListener(h);
+
+        Button sin = new Button("sin");
+        sin.setBounds(350,150,50,50);
+        sin.addActionListener(h);
+        add(sin);
+
+        Button cos = new Button("cos");
+        cos.setBounds(350,200,50,50);
+        cos.addActionListener(h);
+        
+        add(cos);
+
+
+        Button tan = new Button("tan");
+        tan.setBounds(350,250,50,50);
+        tan.addActionListener(h);
+        
+        add(tan);
+
+
+        Button exp = new Button("^");
+        exp.setBounds(350,300,50,50);
+        exp.addActionListener(h);
+     
+        add(exp);
+
+    }
+
+    class ActionHandler implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+
+            String act = e.getActionCommand();
+            char ch = act.charAt(0);
+            if (ch >= '0' && ch <= '9' || ch == '.') {
+                if (op.equals(""))
+                    num1 += act;
+                else
+                    num2 += act;
+                t1.setText(num1 + op + num2);
+            } else if (ch == 'C') {
+                num1 = num2 = op = "";
+                t1.setText(num1 + op + num2);
+            } else if (ch == '=') {
+                if (!num1.equals("") && !num2.equals("")) {
+                    calculate();
+                } else if (num2.equals("")) {
+                    double n1 = Double.parseDouble(num1);
+                    if (op.equals("sin")) {
+                        t1.setText(""+Math.sin(Math.toRadians(n1)));
+                        num1 = ""+Math.sin(Math.toRadians(n1));
+                        num2 = op = "";
+                    } else if(op.equals("cos")){
+                        t1.setText(""+Math.cos(Math.toRadians(n1)));
+                        num1 = ""+Math.cos(Math.toRadians(n1));
+                        num2 = op = "";
+                    } else if(op.equals("tan")){
+                        t1.setText(""+Math.tan(Math.toRadians(n1)));
+                        num1 = ""+Math.tan(Math.toRadians(n1));
+                        num2 = op = "";
+                    }
+                }
+            } else {
+                if (op.equals("") || num2.equals("")) {
+                    op = act;
+                    t1.setText(num1 + op + num2);
+                } else {
+                    num1 = Double.toString(calculate());
+                    num2 = "";
+                    op = act;
+                    t1.setText(num1+op+num2);
+                }
+            }
+        }
+
+        private double calculate() {
+            double n1 = Double.parseDouble(num1);
+            double n2 = Double.parseDouble(num2);
+            double result = 0.0;
+
+            if (op.equals("+"))
+                result = n1 + n2;
+            if (op.equals("-"))
+                result = n1 - n2;
+            if (op.equals("/"))
+                result = n1 / n2;
+            if (op.equals("*"))
+                result = n1 * n2;
+            if (op.equals("^"))
+                result = Math.pow(n1,n2);
+
+            t1.setText(Double.toString(result));
+            num1 = Double.toString(result);
+            num2 = op = "";
+            return result;
+        }
+    }
+}
